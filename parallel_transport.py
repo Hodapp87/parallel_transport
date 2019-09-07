@@ -1,6 +1,7 @@
 import numpy
 import sympy
 from sympy.vector import CoordSys3D
+import quaternion
 
 def mtx_rotate_by_vector(b, theta):
     """Returns 3x3 matrix for rotating around some 3D vector."""
@@ -14,6 +15,17 @@ def mtx_rotate_by_vector(b, theta):
         [b[0]*b[2]*(1-c)-s*b[1], b[1]*b[2]*(1-c)+s*b[0], c+(b[2]**2)*(1-c)],
     ])
     return rot
+
+def rotation_quaternion(axis, angle):
+    qc = numpy.cos(angle / 2)
+    qs = numpy.sin(angle / 2)
+    qv = qs * axis
+    return numpy.quaternion(qc, qv[0], qv[1], qv[2])
+
+def vec2quat(vs):
+    qs = numpy.zeros(vs.shape[0], dtype=numpy.quaternion)
+    quaternion.as_float_array(qs)[:,1:4] = vs
+    return qs
 
 def gen_faces(v1a, v1b, v2a, v2b):
     """Returns faces (as arrays of vertices) connecting two pairs of
