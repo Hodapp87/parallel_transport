@@ -16,7 +16,18 @@ def mtx_rotate_by_vector(b, theta):
     ])
     return rot
 
+def conjugate_by(vec, quat):
+    """Turn 'vec' to a quaternion, conjugate it by 'quat', and return it."""
+    q2 = quat * vec2quat(vec) * quat.conjugate()
+    return quaternion.as_float_array(q2)[:,1:]
+
 def rotation_quaternion(axis, angle):
+    """Returns a quaternion for rotating by some axis and angle.
+    
+    Inputs:
+    axis -- numpy array of shape (3,), with axis to rotate around
+    angle -- angle in radians by which to rotate
+    """
     qc = numpy.cos(angle / 2)
     qs = numpy.sin(angle / 2)
     qv = qs * axis
